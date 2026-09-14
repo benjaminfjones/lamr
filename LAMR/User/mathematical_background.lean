@@ -34,9 +34,65 @@ partial def hanoi (numDisks start finish aux : Nat) (state : List (Array Nat)) :
 
 #eval hanoi 3 0 1 2 [#[3, 0, 0]]
 
-
 /-
-## Exercises
 
-1. 
+## 2.2
+
+Theorem: For any n >= 3, the sum of the angles in any n-gon is 180(n-2)
+
+Proof: Sum of angles in the triangle is 180 ("Triangle Postulate" - base case).
+  Now, take an n-gon and two adjacent sides. Carve off a triangle with those two
+  sides and a third. The interior angles of the triangle + those of the (n-1)-gon
+  add up to 180((n-1)-2) + 180 by induction. Thus 180(n-2) overall.
+
+--> Required Mathlib
+
+/-- The two geometric inputs of the textbook argument, as hypotheses on a
+  purported angle-sum function `S`. -/
+  structure AngleSumData (S : ℕ → ℝ) : Prop where
+    /-- Triangle Postulate. -/
+    base : S 3 = 180
+    /-- Two-ears theorem + additivity of interior angles across the diagonal. -/
+    step : ∀ n, 4 ≤ n → S n = S (n - 1) + 180
+
+  theorem angleSum_eq {S : ℕ → ℝ} (h : AngleSumData S) :
+      ∀ n, 3 ≤ n → S n = 180 * ((n : ℝ) - 2) := by
+    intro n hn
+    induction n with
+    | zero => omega
+    | succ m ih =>
+      rcases Nat.lt_or_ge m 3 with hm | hm
+      · have hm2 : m = 2 := by omega
+        subst hm2
+        norm_num [h.base]
+      · have hstep : S (m + 1) = S m + 180 := by
+          simpa using h.step (m + 1) (by omega)
+        rw [hstep, ih (by omega)]
+        push_cast
+        ring
+
+### Course-of-values recursion
+
+Fibonacci:
+
+F_0 = 0
+F_1 = 1
+F_n = F_{n+1} + F_n
+
+N-choose-K:
+
+          | 1                         if k = 0 or k = n
+f(n, k) = {
+          | (f(n-1, k) + f(n-1, k-1)  else
+
+f is well-founded because the first argument always decreases
+
+f(n, k) = n-choose-k = n! / k! (n - k)!
+
+            | x                  if y = 0
+gcd(x, y) = {
+            | gcd(y, mod(x, y))  else
+
+gcd is well-founded because the second argument always decreases
+
 -/
