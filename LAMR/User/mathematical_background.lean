@@ -95,4 +95,41 @@ gcd(x, y) = {
 
 gcd is well-founded because the second argument always decreases
 
+## 2.5
+
+1. Theorem: sum_{i < n} ar^i = a(r^n-1)/(r-1)
+   Proof: n=0 -> 0 = a*(1-1)/(r-1) = 0
+          n+1 -> sum_{i<n+1} ar^i = sum_{i<n} ar^i + ar^n = a(r^n-1)/(r-1) + ar^n by induction
+              -> _ = a((r^n-1)+(r^n)(r-1))/(r-1) = a(r^n-1+r^(n+1)-r^n)/(r-1) = a(r^(n+1)-1)(r-1)
+              -> QED
+
+2. Theorem: n > 4, then n! > 2^n.
+   Proof: Recall that (n+1)! = sum_{i=0}^n i*i! + 1
+          For n=5, result is clear: 5! = 120 > 32
+          Want to show that (n+1)! > 2^(n+1).
+          So _ = sum_{i=0}^n i*i! + 1
+             _ > low terms + sum_{i=5}^n i*(2^i) + 1
+             _ > low terms + sum_{i=5}^n 2*2^i + 1
+             _ > sum_{i=5}^n 2^(i+1) >= 2^(n+1) <-- last term since when n > 5
+
+3. Theorem: sum_{i=1}^n 1/(n*(n+1)) = n/(n+1)
+   Proof: n=0: 1/1 = 1/1
+          n+1: sum_{i=1}^n 1/(n*(n+1)) + 1/((n+1)*(n+2)) =
+               n/(n+1) + 1/((n+1)*(n+2)) = (n(n+2) + 1)/((n+1)(n+2))
+                                       _ = (n^2 + 2n + 1)/((n+1)(n+2))
+                                       _ = (n+1)^2/((n+1)(n+2))
+                                       _ = (n+1)/(n+2)
+                                       QED
+
+4. Hanoi: for or every n, it takes at least 2^n - 1 moves to move all the disks
+   from one peg to another
+
+   Proof: n=1: 1 peg from A to B can be done in 1 move. 1 move must be taken at least and 2^n - 1
+   = 1.
+          n+1: Suppose we can move n+1 disks in fewer than 2^n - 1 moves... ?
+
+          For n=2, 2^n-1 = 3
+            if you can do it in 2 moves, then it's one move per disk which is impossible since you
+            can't get the larger disk out from under the smaller one w/o the auxiliary move.
+
 -/
