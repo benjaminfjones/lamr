@@ -124,12 +124,67 @@ gcd is well-founded because the second argument always decreases
 4. Hanoi: for or every n, it takes at least 2^n - 1 moves to move all the disks
    from one peg to another
 
-   Proof: n=1: 1 peg from A to B can be done in 1 move. 1 move must be taken at least and 2^n - 1
+   Ideas? n=1: 1 peg from A to B can be done in 1 move. 1 move must be taken at least and 2^n - 1
    = 1.
-          n+1: Suppose we can move n+1 disks in fewer than 2^n - 1 moves... ?
+          n+1: Suppose we can move n+1 disks in fewer than 2^(n+1) - 1 moves... ?
 
           For n=2, 2^n-1 = 3
             if you can do it in 2 moves, then it's one move per disk which is impossible since you
             can't get the larger disk out from under the smaller one w/o the auxiliary move.
+
+          In general, label the disks from smallest D_0 to largest D_{n-1}.
+          During solving, D_{n-1} must at some point be moved to peg B. This is
+          only possible if D_{n-2} ... D_0 are placed on aux peg C. Then they
+          need to be moved onto peg B as well. Let M(n) be the minimal number
+          of moves required to move n disks from one peg to another with an
+          axiliary. Thus the min number of moves required in the original case
+          is M(n) = 2M(n-1) + 1. The recurrance relation has solution 2^n - 1:
+          2*(2^(n-1) - 1) + 1 = 2^n - 2 + 1 = 2^n - 1. QED
+
+5. Adjacent peg hanoi:
+
+.
+o              .
+O          O   o
+| | |  ->  | | |  in 8 moves
+
+To move top 2 disks to peg 3 takes 8 moves: move to peg 2 with 4 moves, then flower 2 moves, then move top peg1 2 to the right.
+To move a stack of 2 pegs one peg adjacent takes 4 moves and 2 pegs!
+To move all 3 disks to peg 3 takes: M(3) = M(2)+1+M(2)+1+M(2) = 3*M(2)+2
+  - move top 2 to peg 3   -> 8
+  - move big peg to peg 2 -> 1
+  - move top 2 to peg 1   -> 8
+  - move big peg to peg 3 -> 1
+  - move top 2 to peg 3   -> 8
+  - total: M(3) = 3*8 + 2
+  - note: 8 was M(2)
+
+Conjecture: M(n) = 3*M(n-1) + 2 and that M(n) = 3^n - 1
+M(n+1) = 3*M(n) + 2 --> sanity check: 3^(n+1) - 1 = 3*(3^n - 1) + 2 yep!
+
+Use a telecoping series to find M(n) in closed form.
+
+M(n+1) = 3*M(n) + 2
+M(n+1) - 3*M(n) = 2
+M(n+1)/3 - M(n) = 2/3
+define A(n) := M(n)/3^n, so that A(n+1) - A(n) = M(n+1)/3^(n+1) - M(n)/3^n
+                                               = M(n+1)/3^(n+1) - 3M(n)/3^(n+1)
+                                               = 1/3^(n+1) [ M(n+1) - 3M(n) ]
+                                               = 2/3^(n+1)
+
+Now sum from k=0 to n-1:
+
+A(1) - A(0) + A(2) - A(1) + ... + A(n) - A(n-1) = sum_{k=0}_{n-1} 2/3^(k+1)
+xxx           xxx    xxx                 xxxxxx
+-A(0) + A(n) = 2 sum 1/3^(k+1)
+-M(0)/1 + M(n)/3^n = 2 sum 1/3^(k+1)
+M(n) = 2 3^n sum 1/3^(k+1)
+     = 2 sum_{k=0}^{n-1} 3^n / 3^(k+1)
+     = 2 [ 3^(n-1) + 3^(n-2) + ... + 1 ]
+     = 2 (1-3^n)/(1-3)  <- exponential sum formula
+     = 3^n - 1
+
+QED
+
 
 -/
