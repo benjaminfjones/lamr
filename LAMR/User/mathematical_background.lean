@@ -186,5 +186,26 @@ M(n) = 2 3^n sum 1/3^(k+1)
 
 QED
 
+6. skipped
 
+7. skipped
+
+8. (2) F_i = F_{i-1} + F_{i-2}
+so sum_{i < n} F_i = F_0 + F_1 + F_2 + ... + F_{n-1}
+by induction?
+n=1: F_0 = F_1 - 1
+       0 = 0 check
+
+assume sum_{i < n} F_i = F_{n+1} - 1
+then   sum_{i < n+1} F_i = F_{n+1} - 1 + F_n = F_{n+2} - 1 check
+
+8. (3) sum_{i <= n} F_i^2 = F_n F_{n+1}
+n=0: F_0^2 = F_0 F_1
+       0^2 = 0 * 1 check
+assume sum_{i <= n} F_i^2 = F_n F_{n+1}, then
+
+sum_{i <= n+1} F_i^2 = F_n F_{n+1} + F_{n+1}^2 = (F_n + F_{n+1}) F_{n+1}
+                                               = F_{n+2} F_{n+1} check
+
+9. skipped
 -/
